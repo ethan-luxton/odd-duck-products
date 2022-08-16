@@ -32,7 +32,6 @@ let currentRound = 0;
 function random() {
     return Math.floor(Math.random() * allProducts.length) 
 };
-
 let img = [document.getElementById('productImage1'), document.getElementById('productImage2'), document.getElementById('productImage3')];  
 let rObj1, rObj2, rObj3;
 let rObj = [rObj1, rObj2, rObj3];
@@ -61,8 +60,6 @@ function randomImg() {
 }
 randomImg();   
 let button = [document.getElementById('productButton1'), document.getElementById('productButton2'), document.getElementById('productButton3')];
-
-
 for (let i = 0; i < button.length; i++) {
     button[i].addEventListener('click', showNewImage);
 };
@@ -101,4 +98,3 @@ function displayResults(){
     }
     displayInfoBtn.removeEventListener('click', displayResults);
 }
-
