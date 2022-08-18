@@ -1,6 +1,6 @@
 "use strict";
 const maxRounds = 25;
-let vote = [[],[]];
+let current = [];
 function Product(name, file) {
     this.name = name;
     this.file = file;
@@ -27,33 +27,37 @@ let allProducts = [
     new Product ('unicorn', 'img/unicorn.jpg'),
     new Product ('water-can', 'img/water-can.jpg'),
     new Product ('wine-glass', 'img/wine-glass.jpg')
-];
+]; 
 let currentRound = 0;
 function random() {
     return Math.floor(Math.random() * allProducts.length) 
 };
 let img = [document.getElementById('productImage1'), document.getElementById('productImage2'), document.getElementById('productImage3')];  
-let rObj1, rObj2, rObj3;
+// let rImg1, rImg2, rImg3;
+let rImg = []
+let rObj1, rObj2, rObj3, rObj4;
 let rObj = [rObj1, rObj2, rObj3];
 function randomImg() {
-    let rImg1, rImg2, rImg3;
-    let rImg = [rImg1, rImg2, rImg3]
-    rImg[0] = random();
-    rImg[1] = random();
-    rImg[2] = random();
-    while (rImg[0] === rImg[1]) {
-        rImg[1] = random();
-    };
-    while (rImg[1] === rImg[2] || rImg[0] === rImg[2]){
-        rImg[2] = random();
-    };
+    // Generates six random images and shifts them everytime to ensure that no duplicates will be shown in the same set or immediately after
+    while (rImg.length < 6) {
+        let index = random()
+        if (!rImg.includes(allProducts[index])) {
+            rImg.push(allProducts[index])
+        }
+    }
+    rImg.shift()
+    rImg.shift()
+    rImg.shift()
+    // Pushes img properties to HTML
     for (let i = 0; i < rObj.length; i++) {
-        rObj[i] = allProducts[rImg[i]]
+        rObj[i] = rImg[i]
         img[i].src = rObj[i].file;
         img[i].id = rObj[i].name;
         img[i].alt = rObj[i].name;
         img[i].title = rObj[i].name;
+        
     }
+    // Adds one to shown for each image
     rObj[0].shown += 1;
     rObj[1].shown += 1;
     rObj[2].shown += 1;
@@ -67,22 +71,16 @@ function showNewImage(e) {
     let objName = e.target.id
     if (objName === rObj[0].name){
         rObj[0].clicked+= 1;
-        vote[0].push(`${rObj[0].name}`)
-        vote[1].push(`${rObj[0].clicked}`)
     } else if (objName === rObj[1].name){
         rObj[1].clicked+= 1;
-        vote[0].push(`${rObj[1].name}`)
-        vote[1].push(`${rObj[1].clicked}`)
     } else if (objName === rObj[2].name){
         rObj[2].clicked+= 1;
-        vote[0].push(`${rObj[2].name}`)
-        vote[1].push(`${rObj[2].clicked}`)
     }
-    currentRound++; 
+    currentRound++;
     if (currentRound === maxRounds) {   
         for (let i = 0; i < button.length; i++) {
             button[i].removeEventListener('click', showNewImage);
-            button[i].hidden = true;
+            button[i].hidden = true; 
         }
     }
     randomImg();
@@ -93,8 +91,64 @@ function displayResults(){
     display.appendChild(li);
     for (let i = 0; i < allProducts.length; i++){
         let result = document.createElement('li');
-        result.textContent = `${allProducts[i].name} had ${allProducts[i].clicked} votes, and was seen ${allProducts[i].shown} times.`
+        result.textContent = `${allProducts[i].name} had ${allProducts[i].clicked} votes, and was seen ${allProducts[i].shown} times. `
         li.appendChild(result);
     }
-    displayInfoBtn.removeEventListener('click', displayResults);
+    displayInfoBtn.removeEventListener('click', displayResults); 
+    renderChart()
 }
+function renderChart() {
+    let names = [];
+    let clicks = [];
+    let shown = [];
+    for (let i = 0; i < allProducts.length; i++) {
+        names.push(allProducts[i].name);
+        clicks.push(allProducts[i].clicked);
+        shown.push(allProducts[i].shown);
+    }
+  
+    /* refer to Chart.js > Chart Types > Bar Chart: 
+    https://www.chartjs.org/docs/latest/charts/bar.html 
+    and refer to Chart.js > Getting Started > Getting Started:
+    https://www.chartjs.org/docs/latest/getting-started/ */
+    const data = {
+      labels: names,
+      datasets: [{
+        label: 'Clicks',
+        data: clicks,
+        backgroundColor: [
+          '#BF0B3B'
+        ],
+        borderColor: [
+          '#BF0B3B'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: 'Views',
+        data: shown,
+        backgroundColor: [
+          '#D9D9D9'
+        ],
+        borderColor: [
+          '#D9D9D9'
+        ],
+        borderWidth: 1
+      }]
+    };
+  
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      },
+    };
+    let canvasChart = document.getElementById('myChart');
+    const myChart = new Chart(canvasChart, config);
+  }
+  
