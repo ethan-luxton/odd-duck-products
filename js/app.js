@@ -1,11 +1,10 @@
 "use strict";
 const maxRounds = 25;
-let current = [];
 function Product(name, file) {
     this.name = name;
     this.file = file;
     this.shown = 0;
-    this.clicked = 0;
+    this.clicked = 0;  
 }
 let allProducts = [
     new Product ('bag','img/bag.jpg'),
@@ -27,7 +26,7 @@ let allProducts = [
     new Product ('unicorn', 'img/unicorn.jpg'),
     new Product ('water-can', 'img/water-can.jpg'),
     new Product ('wine-glass', 'img/wine-glass.jpg')
-]; 
+];
 let currentRound = 0;
 function random() {
     return Math.floor(Math.random() * allProducts.length) 
@@ -54,8 +53,7 @@ function randomImg() {
         img[i].src = rObj[i].file;
         img[i].id = rObj[i].name;
         img[i].alt = rObj[i].name;
-        img[i].title = rObj[i].name;
-        
+        img[i].title = rObj[i].name; 
     }
     // Adds one to shown for each image
     rObj[0].shown += 1;
@@ -95,8 +93,10 @@ function displayResults(){
         li.appendChild(result);
     }
     displayInfoBtn.removeEventListener('click', displayResults); 
-    renderChart()
+    renderChart();
+    storage();
 }
+// Renders the chart
 function renderChart() {
     let names = [];
     let clicks = [];
@@ -106,7 +106,6 @@ function renderChart() {
         clicks.push(allProducts[i].clicked);
         shown.push(allProducts[i].shown);
     }
-  
     /* refer to Chart.js > Chart Types > Bar Chart: 
     https://www.chartjs.org/docs/latest/charts/bar.html 
     and refer to Chart.js > Getting Started > Getting Started:
@@ -136,7 +135,6 @@ function renderChart() {
         borderWidth: 1
       }]
     };
-  
     const config = {
       type: 'bar',
       data: data,
@@ -151,4 +149,20 @@ function renderChart() {
     let canvasChart = document.getElementById('myChart');
     const myChart = new Chart(canvasChart, config);
   }
+// Local storage of vote and shown data
+function storage(){
+  if (localStorage.getItem("products") === null){
+    let str = JSON.stringify(allProducts);
+    localStorage.setItem("products", str);
+  } else { 
+      let storedProducts = localStorage.getItem("products");
+      let parsed = JSON.parse(storedProducts);
+      for (let i = 0; i < allProducts.length; i++){
+        allProducts[i].shown = allProducts[i].shown + parsed[i].shown
+        allProducts[i].clicked = allProducts[i].clicked + parsed[i].clicked
+        let str = JSON.stringify(allProducts);
+        localStorage.setItem("products", str);
+      }
+  }
   
+}
