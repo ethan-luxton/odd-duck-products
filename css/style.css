@@ -1,9 +1,76 @@
+header {
+    
+    text-align: center;
+    background-color: cadetblue;
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.205);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: azure;
+}
+
+body {
+    background-color: black;
+}
+main {
+    background-color: rgb(64, 64, 64);
+}
+main > #products, #displayinfo > #btn {
+    text-align: center;
+}
+button {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: cadetblue;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.205);
+}
+#productButton1:hover, #productButton2:hover, #productButton3:hover {
+    animation-name: spinY, depth;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 15s;
+}
 button img {
-    width: 500px;
-    height: 500px;
+    width: 300px;
+    height: 300px;
+}
+#btn > #displayInfoBtn {
+    padding: 5px;
+    font-weight: 600;
+    color: azure;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 canvas {
     width: 1000px;
     height: 750px;
+    display: block;
+    margin-top: 2rem;
+    margin-right:auto;
+    margin-left: auto;
+    border-radius: 5px;
     
+}
+ul {
+    color: cadetblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    text-align: center;
+    list-style: none;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+li {
+    padding-top: 10px;
+}
+@keyframes spinY {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(-360deg); }
+}
+
+@keyframes depth {
+    0% { text-shadow: 0 0 salmon; }
+    25% { text-shadow: 1px 0 black, 2px 0 black, 3px 0 black, 4px 0 black, 5px 0 black; }
+    50% { text-shadow: 0 0 black; }
+    75% { text-shadow: -1px 0 black, -2px 0 black, -3px 0 black, -4px 0 black, -5px 0 black; }
+    100% { text-shadow: 0 0 black; }
 }

@@ -139,6 +139,7 @@ function renderChart() {
       type: 'bar',
       data: data,
       options: {
+        responsive: false,
         scales: {
           y: {
             beginAtZero: true
@@ -148,6 +149,7 @@ function renderChart() {
     };
     let canvasChart = document.getElementById('myChart');
     const myChart = new Chart(canvasChart, config);
+    canvasChart.style.backgroundColor = 'aliceblue'
   }
 // Local storage of vote and shown data
 function storage(){
